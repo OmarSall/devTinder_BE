@@ -13,8 +13,12 @@ app.post("/signup", async (req,res) => {
     // creating a new instance of a user model
     const user = new User(userObj)
 
-    await user.save();
-    res.send("User Added successfully!")
+    try {
+        await user.save();
+        res.send("User Added successfully!")
+    } catch (err) {
+        res.status(400).send("Error saving the user:" + err.message);
+    }
 })
 
 connectDB
