@@ -50,3 +50,20 @@ app.get(
 
     }
 )
+
+------------------------------------------------
+
+// Handle Auth Middleware for all request GET, POST etc
+app.use("/admin", adminAuth)
+
+app.get("/admin/getAllData", (req, res, next) => {
+    res.send("All Data Sent");
+});
+
+app.get("/user", userAuth, (req, res) => {
+    res.send("User Data Sent")
+})
+
+app.get("/admin/deleteUser", (req, res) => {
+    res.send("Deleted a user")
+})
