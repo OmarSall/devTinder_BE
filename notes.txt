@@ -26,3 +26,27 @@ app.use("/hello",(req, res) => {
 app.use("/",(req, res) => {
     res.send("Hello from the dashboard");
 })
+-------------------------------------------
+app.use(
+    "/user",
+    (req, res, next) => {
+        console.log("Handling the route user!!")
+        next();
+        // res.send("Response!!");  // server send the response and it will not go any further
+
+    },
+    (req, res, next) => {
+        console.log("Handling the route user 2!!!");
+        next();
+        // res.send("2nd Response!!")
+    // }
+)
+
+app.get(
+    "/user",
+    (req, res) => {
+        console.log("Handling the route user!!")
+        res.send("2nd independent route handler!!");  // server send the response and it will not go any further
+
+    }
+)

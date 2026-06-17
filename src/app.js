@@ -2,19 +2,23 @@ const express = require('express');
 
 const app = express();
 
-app.use(
-    "/user",
-    (req, res, next) => {
-        console.log("Handling the route user!!")
-        next();
-        res.send("Response!!");  // server send the response and it will not go any further
+const {adminAuth, userAuth} = require("./middlewares/auth")
 
-    },
-    (req, res) => {
-        console.log("Handling the route user 2!!!")
-        res.send("2nd Response!!")
-    }
-)
+// Handle Auth Middleware for all request GET, POST etc
+app.use("/admin", adminAuth)
+
+app.get("/admin/getAllData", (req, res, next) => {
+    res.send("All Data Sent");
+});
+
+app.get("/user", userAuth, (req, res) => {
+    res.send("User Data Sent")
+})
+
+app.get("/admin/deleteUser", (req, res) => {
+    res.send("Deleted a user")
+})
+
 
 app.listen(3000, () => {
     console.log("Server is successfully listening on port 3000...")
