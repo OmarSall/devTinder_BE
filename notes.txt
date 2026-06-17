@@ -67,3 +67,26 @@ app.get("/user", userAuth, (req, res) => {
 app.get("/admin/deleteUser", (req, res) => {
     res.send("Deleted a user")
 })
+
+mongodb+srv://omarsalloum08:M08wVHRqBoxuYsZN@omarito.jiddg2a.mongodb.net/
+
+--------------------------------------------------------
+
+app.get("/user", (req, res) => {
+    try {
+        // Logic of DB call and get user data
+
+        throw new Error("irbgfsir");
+
+        res.send("User Data Sent");
+    } catch (error) {
+        res.status(500).send("Some Error, contact support team")
+    }
+})
+
+app.use("/", (error, req, res, next) => {
+    if  (err) {
+        // Log your errors
+        res.status(500).send("something went wrong")
+    }
+})
