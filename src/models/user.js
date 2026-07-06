@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-// const validator = require("validator")
-
+const validator = require("validator")
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -18,12 +17,12 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         trim: true,
         validate: {
-            validate(value) {
-                if (!validator.isEmail(value)) {
-                    throw new Error("Invalid email address: " + value);
-                }
-            }
+            validator(value) {
+                return validator.isEmail(value);
+            },
+            message: "Invalid email address"
         }
+
     },
     password: {
         type: String,
@@ -35,21 +34,23 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        validate(value) {
-            if (!["male", "female", "others"].includes(value)) {
-                throw new Error("Gender data is not valid")
-            }
+        validate: {
+            validator(value) {
+                if (!["male", "female", "others"].includes(value)) {
+                    throw new Error("Gender data is not valid")
+                }
+            },
+            message: "Invalid gender"
         }
     },
     photoUrl: {
         type: String,
         default: "https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg?w=1000",
         validate: {
-            validate(value) {
-                if (!validator.isURL(value)) {
-                    throw new Error("Invalid photo URL: " + value);
-                }
-            }
+            validator(value) {
+                return validator.isURL(value);
+            },
+            message: "Invalid photo URL"
         }
     },
     about: {
@@ -58,18 +59,19 @@ const userSchema = new mongoose.Schema({
     },
     skills: {
         type: [String],
-        validate(skills) {
-            if (skills.length > 20) {
-                throw new Error("Maximum 20 skills allowed");
-            }
+        validate: {
+            validator(skills) {
+                if (skills.length > 20) {
+                    return false;
+                }
 
-            const uniqueSkills = new Set(
-                skills.map((skill) => skill.toLowerCase().trim())
-            );
+                const uniqueSkills = new Set(
+                    skills.map((skill) => skill.toLowerCase().trim())
+                );
 
-            if (uniqueSkills.size !== skills.length) {
-                throw new Error("Duplicate skills are not allowed");
-            }
+                return uniqueSkills.size === skills.length;
+            },
+            message: "Maximum 20 skills allowed or duplicate skills detected"
         }
     }
 }, {
