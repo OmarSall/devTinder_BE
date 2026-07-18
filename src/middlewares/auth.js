@@ -6,12 +6,14 @@ const userAuth = async (req, res, next) => {
     try {
         // read the token from the req cookies
         const cookies = req.cookies;
+        // extract the token from the cookie
         const {token} = cookies;
 
+        // validate the token
         if (!token) {
             throw new Error("Token is not valid")
         }
-        // validate the token
+
         const decodedObj = await jwt.verify(token, secretKey);
         const {_id} = decodedObj;
 
@@ -21,6 +23,8 @@ const userAuth = async (req, res, next) => {
         if (!user) {
             throw new Error("User not found")
         }
+
+        // attaching the user to the request
         req.user = user;
         next();
     } catch (err) {

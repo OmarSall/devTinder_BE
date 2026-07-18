@@ -48,16 +48,12 @@ app.post("/login", async (req, res) => {
         if (!user) {
             throw new Error("Invalid credentials")
         }
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await user.getJWT();
 
         if (isPasswordValid) {
 
             // Create a JWT
-            const token = await jwt.sign(
-                { _id: user._id },
-                secretKey,
-                { expiresIn: "1d" }
-            );
+            const token = await user.getJWT();
 
             // Add the token to cookie and send the response back to the user
             res.cookie("token", token,
@@ -72,7 +68,7 @@ app.post("/login", async (req, res) => {
         res.status(400).send("ERROR: " + err.message);
     }
 })
-
+// if the userAuth will fail the code will not be even executed
 app.get("/profile", userAuth, async (req, res) => {
     try {
         const user = req.user;
