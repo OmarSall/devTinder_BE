@@ -1,0 +1,20 @@
+const express = require("express");
+const {userAuth} = require("../middlewares/auth");
+
+const profileRouter = express.Router();
+
+// if the userAuth will fail the code will not be even executed
+profileRouter.get("/profile", userAuth, async (req, res) => {
+    try {
+        const user = req.user;
+        if(!user) {
+            throw new Error("User does not exist");
+        }
+
+        res.send(user);
+    } catch (err) {
+        res.status(400).send("ERROR: " + err.message);
+    }
+});
+
+module.exports = profileRouter;
