@@ -11,10 +11,12 @@ app.use(cookieParser());
 const authRouter = require("./routes/authRouter");
 const profileRouter = require("./routes/profileRouter");
 const requestRouter = require("./routes/requestsRouter");
+const userRouter = require("./routes/userRouter");
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
+app.use("/", userRouter);
 
 // get user by email, using middleware userAuth, the code inside .get will not be even
 // executed when for example there is no token
